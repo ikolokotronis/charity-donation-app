@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Institution(models.Model):
     name = models.CharField(max_length=255)
@@ -16,6 +19,9 @@ class Institution(models.Model):
     )
     type = models.IntegerField(choices=type_choices, default=1)
     categories = models.ManyToManyField(Category)
+
+    def __str__(self):
+        return self.name
 
 
 class Donation(models.Model):
@@ -30,3 +36,6 @@ class Donation(models.Model):
     pick_up_time = models.DateTimeField()
     pick_up_comment = models.TextField()
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f'{self.user} to {self.institution}'
