@@ -46,4 +46,4 @@ class Donation(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.user} to {self.institution}'
+        return f'{self.user} -> {self.institution} {self.pick_up_time}'
