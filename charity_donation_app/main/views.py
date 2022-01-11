@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from main.models import Institution, Donation, InstitutionCategories
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 
 class LandingPageView(View):
@@ -32,6 +33,16 @@ class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
 
+    def post(self, request):
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            return redirect('/register')
+
 
 class RegisterView(View):
     def get(self, request):
@@ -48,4 +59,4 @@ class RegisterView(View):
             User.objects.create_user(username=email, first_name=name, last_name=surname, email=email, password=password)
             return redirect('/login')
         elif password != password2:
-            return render(request, 'register.html')
+            return render(request, 'register.html', {'error_text': 'Hasła nie pasują do siebie!'})

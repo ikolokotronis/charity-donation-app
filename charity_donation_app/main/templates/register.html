@@ -19,6 +19,7 @@
 
     <section class="login-page">
       <h2>Załóż konto</h2>
+      <b>{{error_text}}</b>
       <form method="post">
         {%csrf_token%}
         <div class="form-group">
@@ -38,7 +39,7 @@
         </div>
 
         <div class="form-group form-group--buttons">
-          <a href="login.html" class="btn btn--without-border">Zaloguj się</a>
+          <a href="/login" class="btn btn--without-border">Zaloguj się</a>
           <button class="btn" type="submit">Załóż konto</button>
         </div>
       </form>
