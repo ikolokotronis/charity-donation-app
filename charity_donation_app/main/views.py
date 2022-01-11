@@ -11,10 +11,14 @@ class LandingPageView(View):
             donation_quantity += donation.quantity
         donations = len(Donation.objects.all()) + donation_quantity
         foundations = Institution.objects.filter(type=1)
+        organizations = Institution.objects.filter(type=2)
+        local_collections = Institution.objects.filter(type=3)
         institution_categories = InstitutionCategories.objects.all()
         return render(request, 'index.html', {'supported_institutions': supported_institutions,
                                               'donations': donations,
                                               'foundations': foundations,
+                                              'organizations': organizations,
+                                              'local_collections': local_collections,
                                               'institution_categories': institution_categories})
 
 
