@@ -9,6 +9,14 @@ class Category(models.Model):
         return self.name
 
 
+class InstitutionCategories(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    institution = models.ForeignKey('Institution', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.institution} -> {self.category}"
+
+
 class Institution(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -18,7 +26,7 @@ class Institution(models.Model):
         (3, 'Zbiórka lokalna')
     )
     type = models.IntegerField(choices=type_choices, default=1)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, through=InstitutionCategories)
 
     def __str__(self):
         return self.name
