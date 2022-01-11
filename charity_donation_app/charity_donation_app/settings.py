@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'charity_donation_app.wsgi.application'
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',  # albo 'localhost'
-        'NAME': 'charity_donation',
+        'NAME': 'charity_donation_2',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
