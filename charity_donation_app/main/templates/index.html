@@ -2,10 +2,23 @@
 {%block content%}
   <header class="header--main-page">
       <nav class="container container--70">
+        {%if user.is_authenticated%}
+        <ul class="nav--actions">
+          <li class="logged-user">
+            Witaj {{user.first_name}}
+            <ul class="dropdown">
+              <li><a href="#">Profil</a></li>
+              <li><a href="#">Ustawienia</a></li>
+              <li><a href="/logout/">Wyloguj</a></li>
+            </ul>
+          </li>
+        </ul>
+        {%else%}
         <ul class="nav--actions">
           <li><a href="/login/" class="btn btn--small btn--without-border">Zaloguj</a></li>
           <li><a href="/register/" class="btn btn--small btn--highlighted">Załóż konto</a></li>
         </ul>
+        {%endif%}
 
         <ul>
           <li><a href="" class="btn btn--without-border active">Start</a></li>
@@ -128,7 +141,7 @@
       <!-- SLIDE 2 -->
       <div class="help--slides" data-id="2">
         <p>
-          W naszej bazie znajdziesz listę zweryfikowanych Organizacji Pozarządowych, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.
+          W naszej bazie znajdziesz listę Organizacji Pozarządowych, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.
         </p>
         <ul class="help--slides-items">
           {%for organization in organizations%}

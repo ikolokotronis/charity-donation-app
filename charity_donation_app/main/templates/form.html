@@ -2,16 +2,23 @@
 {%block content%}
   <header class="header--form-page">
       <nav class="container container--70">
+        {%if user.is_authenticated%}
         <ul class="nav--actions">
           <li class="logged-user">
-            Witaj Agata
+            Witaj {{user.first_name}}
             <ul class="dropdown">
               <li><a href="#">Profil</a></li>
               <li><a href="#">Ustawienia</a></li>
-              <li><a href="#">Wyloguj</a></li>
+              <li><a href="/logout/">Wyloguj</a></li>
             </ul>
           </li>
         </ul>
+        {%else%}
+        <ul class="nav--actions">
+          <li><a href="/login/" class="btn btn--small btn--without-border">Zaloguj</a></li>
+          <li><a href="/register/" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+        </ul>
+        {%endif%}
 
         <ul>
           <li><a href="/">Start</a></li>

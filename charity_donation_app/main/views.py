@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from main.models import Institution, Donation, InstitutionCategories
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 class LandingPageView(View):
@@ -60,3 +60,9 @@ class RegisterView(View):
             return redirect('/login')
         elif password != password2:
             return render(request, 'register.html', {'error_text': 'Hasła nie pasują do siebie!'})
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/')
