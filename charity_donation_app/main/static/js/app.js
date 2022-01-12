@@ -252,4 +252,26 @@ document.addEventListener("DOMContentLoaded", function() {
   if (form !== null) {
     new FormSteps(form);
   }
+  /**
+   * Show only chosen categories in step 1
+   */
+  let checked_categories = []
+  const categories_checkbox = document.querySelectorAll('input[name="categories"]');
+  const institutionCategories = document.querySelectorAll('input[name="institutionCategory"]')
+  categories_checkbox.forEach(function (el){
+    el.addEventListener('change', function (event){
+      if(this.checked){
+        checked_categories.push(el.value)
+          institutionCategories.forEach(function (el){
+            if(checked_categories.includes(el.value)){
+              el.parentElement.parentElement.classList.remove("displayNone");
+            }
+          })
+      }
+      else if(this.checked == false){ // not working yet
+        checked_categories.splice(checked_categories.indexOf(el))
+        console.log(checked_categories)
+      }
+    })
+  })
 });

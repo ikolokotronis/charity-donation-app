@@ -25,7 +25,11 @@
           <li><a href="#steps" class="btn btn--without-border">O co chodzi?</a></li>
           <li><a href="#about-us" class="btn btn--without-border">O nas</a></li>
           <li><a href="#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
+          {%if user.is_authenticated%}
           <li><a href="/add_donation/" class="btn btn--without-border">Przekaż dary</a></li>
+          {%else%}
+          <li><a href="/login/" class="btn btn--without-border">Przekaż dary</a></li>
+          {%endif%}
           <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
       </nav>
@@ -101,7 +105,7 @@
 
       <ul class="help--buttons">
         <li data-id="1"><a href="#" class="btn btn--without-border active">Fundacjom</a></li>
-        <li data-id="2"><a href="#" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
+        <li data-id="2"><a href="#" id="test" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
         <li data-id="3"><a href="#" class="btn btn--without-border">Lokalnym zbiórkom</a></li>
       </ul>
 
@@ -196,7 +200,8 @@
               </div>
             </div>
           </li>
-          {%endfor%}
+
+         {%endfor%}
         </ul>
 
         <!-- Pagination
