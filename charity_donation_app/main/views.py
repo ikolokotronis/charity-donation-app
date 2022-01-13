@@ -64,7 +64,7 @@ class AddDonationView(View):
                 category=Category.objects.get(name=category)
             )
 
-        return render(request, 'form-confirmation.html', {'checked_categories': checked_categories})
+        return render(request, 'form-confirmation.html')
 
 
 class LoginView(View):
