@@ -7,9 +7,10 @@
           <li class="logged-user">
             Witaj {{user.first_name}}
             <ul class="dropdown">
-              <li><a href="#">Profil</a></li>
+              <li><a href="/panel/{{user.id}}/">Profil</a></li>
               {%if not user.is_superuser%}
               <li><a href="#">Ustawienia</a></li>
+              <li><a href="/logout/">Wyloguj</a></li>
               {%else%}
               <li><a href="/admin">Panel administracyjny</a></li>
               <li><a href="/logout/">Wyloguj</a></li>
@@ -25,7 +26,7 @@
         {%endif%}
 
         <ul>
-          <li><a href="" class="btn btn--without-border active">Start</a></li>
+          <li><a href="/" class="btn btn--without-border active">Start</a></li>
           <li><a href="#steps" class="btn btn--without-border">O co chodzi?</a></li>
           <li><a href="#about-us" class="btn btn--without-border">O nas</a></li>
           <li><a href="#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
