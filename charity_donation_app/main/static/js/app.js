@@ -274,6 +274,10 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     })
   })
+
+    /**
+   * Show proper values in summary page
+   */
   const number_of_bags = document.querySelector('input[name="bags"]')
   const summary_text = document.querySelector('#summary-details')
   const summary_institution = document.querySelector('#summary-institution')
