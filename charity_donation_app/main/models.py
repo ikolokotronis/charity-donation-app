@@ -32,18 +32,23 @@ class Institution(models.Model):
         return self.name
 
 
+class DonationCategories(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    donation = models.ForeignKey('Donation', on_delete=models.CASCADE)
+
+
 class Donation(models.Model):
     quantity = models.IntegerField()
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, through=DonationCategories)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
     phone_number = models.IntegerField()
     city = models.CharField(max_length=255)
     zip_code = models.CharField(max_length=100)
     pick_up_date = models.DateField()
-    pick_up_time = models.DateTimeField()
+    pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.user} -> {self.institution} {self.pick_up_time}'

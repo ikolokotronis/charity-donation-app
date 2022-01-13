@@ -37,7 +37,7 @@
           </h1>
 
           <div class="slogan--steps">
-            <div class="slogan--steps-title">Wystarczą 4 proste kroki:</div>
+            <div class="slogan--steps-title">Wystarczą 4 proste kroki: </div>
             <ul class="slogan--steps-boxes">
               <li>
                 <div><em>1</em><span>Wybierz rzeczy</span></div>
@@ -80,7 +80,8 @@
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-        <form action="form-confirmation.html" method="post">
+        <form method="post">
+          {%csrf_token%}
           <!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
             <h3>Zaznacz co chcesz oddać:</h3>
@@ -208,6 +209,7 @@
           <!-- STEP 5 -->
           <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
+            <input type="hidden" name="checked_categories_backend">
 
             <div class="summary">
               <div class="form-section">
@@ -241,9 +243,9 @@
                 <div class="form-section--column">
                   <h4>Termin odbioru:</h4>
                   <ul>
-                    <li id="date">13/12/2018</li>
-                    <li id="time">15:40</li>
-                    <li id="more_info">Brak uwag</li>
+                    <li id="date"></li>
+                    <li id="time"></li>
+                    <li id="more_info"></li>
                   </ul>
                 </div>
               </div>
@@ -251,7 +253,7 @@
 
             <div class="form-group form-group--buttons">
               <button type="button" class="btn prev-step">Wstecz</button>
-              <button type="submit" class="btn">Potwierdzam</button>
+              <input type="submit" class="btn" value="Potwierdzam">
             </div>
           </div>
         </form>
