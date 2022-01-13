@@ -274,4 +274,37 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     })
   })
+  const number_of_bags = document.querySelector('input[name="bags"]')
+  const summary_text = document.querySelector('#summary-details')
+  const summary_institution = document.querySelector('#summary-institution')
+  const summary_trigger = document.querySelector('#summaryTrigger')
+  const organizations = document.querySelectorAll('input[name="organization"]')
+
+
+  const street = document.querySelector('input[name="address"]')
+  const city = document.querySelector('input[name="city"]')
+  const postcode = document.querySelector('input[name="postcode"]')
+  const phone_number = document.querySelector('input[name="phone"]')
+
+  const date = document.querySelector('input[name="date"]')
+  const time = document.querySelector('input[name="time"]')
+  const more_info = document.querySelector('textarea[name="more_info"]')
+
+  summary_trigger.addEventListener('click', function (){
+    summary_text.innerText = number_of_bags.value+" worki zawierające: "+checked_categories
+    organizations.forEach(function (organization){
+      if(organization.checked){
+        summary_institution.innerText = 'Dla fundacji "'+organization.value+'"'
+      }
+    })
+    document.querySelector('#street').innerText = street.value
+    document.querySelector('#city').innerText = city.value
+    document.querySelector('#postcode').innerText = postcode.value
+    document.querySelector('#phone_number').innerText = phone_number.value
+
+    document.querySelector('#date').innerText = date.value
+    document.querySelector('#time').innerText = time.value
+    document.querySelector('#more_info').innerText = more_info.value
+  })
+
 });
