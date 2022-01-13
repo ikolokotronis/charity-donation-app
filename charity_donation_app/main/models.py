@@ -36,6 +36,9 @@ class DonationCategories(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     donation = models.ForeignKey('Donation', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.donation} -> {self.category}"
+
 
 class Donation(models.Model):
     quantity = models.IntegerField()
@@ -51,4 +54,4 @@ class Donation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.user} -> {self.institution} {self.pick_up_time}'
+        return f'{self.user} ({self.institution}, {self.pick_up_time})'

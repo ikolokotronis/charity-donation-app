@@ -269,7 +269,6 @@ document.addEventListener("DOMContentLoaded", function() {
           })
       }
       else if(this.checked == false){ // not working yet
-        checked_categories.splice(checked_categories.indexOf(el))
         console.log(checked_categories)
       }
     })

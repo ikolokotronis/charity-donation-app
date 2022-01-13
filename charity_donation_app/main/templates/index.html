@@ -8,8 +8,12 @@
             Witaj {{user.first_name}}
             <ul class="dropdown">
               <li><a href="#">Profil</a></li>
+              {%if not user.is_superuser%}
               <li><a href="#">Ustawienia</a></li>
+              {%else%}
+              <li><a href="/admin">Panel administracyjny</a></li>
               <li><a href="/logout/">Wyloguj</a></li>
+              {%endif%}
             </ul>
           </li>
         </ul>
