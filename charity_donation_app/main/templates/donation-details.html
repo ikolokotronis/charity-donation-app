@@ -54,6 +54,11 @@
                 {%for category in donation_categories%}
                 {%if donation.id == category.donation_id%}{{category.category.name}}, {%endif%}
                 {%endfor%}
+                <h4>Adres / dane</h4>
+                Ulica: {{donation.address}}<br>
+                Miasto: {{donation.city}}<br>
+                Kod pocztowy: {{donation.zip_code}}<br>
+                Numer telefonu: {{donation.phone_number}}
                 <h4>Status daru</h4>
                 <form method="post">
                     {%csrf_token%}
@@ -64,12 +69,16 @@
                     Przekazano<input type="radio" name="is_taken" value="true">
                     Nie przekazano<input type="radio" name="is_taken" value="false" checked="checked">
                     {%endif%}
-                    <input type="submit" value="Wyślij">
+                    <input style="position: relative; bottom: 42px; left: 10px;" class="btn" type="submit" value="Wyślij">
                 </form>
                 {%if donation.is_taken == True%}
                 <h4>Data odebrania rzeczy</h4>
                 {{donation.date_taken}}
                 {%endif%}
+                <h4>Komentarz</h4>
+                {{donation.pick_up_comment}}
+                <h4>Data dodania wpisu</h4>
+                {{donation.date_added}}
             </ul>
         </div>
       </div>
