@@ -131,7 +131,7 @@ class LogoutView(View):
 
 class UserPanelView(View):
     def get(self, request, user_id):
-        donations = Donation.objects.filter(user_id=user_id)
+        donations = Donation.objects.filter(user_id=user_id).order_by('date_added').order_by('date_taken').order_by('is_taken')
         donation_categories = DonationCategories.objects.all()
         return render(request, 'user_panel.html', {'donations': donations,
                                                    'donation_categories': donation_categories})

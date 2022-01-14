@@ -52,7 +52,7 @@
                 <h4>E-mail</h4> {{user.email}}
             </ul>
             <h2>Dary</h2>
-            {%for donation in donations|dictsort:"is_taken"|dictsort:"date_taken"|dictsort:"date_added"%}
+            {%for donation in donations%}
             <br><b>---</b><br>
             {%if donation.is_taken == True%}
             <div style="border: 1px solid #8F8F8D; padding: 10px; color: grey;">
