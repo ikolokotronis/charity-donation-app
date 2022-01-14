@@ -3,6 +3,7 @@ from django.views import View
 from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from datetime import date
 
 
 class LandingPageView(View):
@@ -65,6 +66,28 @@ class AddDonationView(View):
             )
 
         return render(request, 'form-confirmation.html')
+
+
+class DonationDetailsView(View):
+    def get(self, request, donation_id):
+        donation = Donation.objects.get(id=donation_id)
+        donation_categories = DonationCategories.objects.all()
+        return render(request, 'donation-details.html', {'donation': donation,
+                                                         'donation_categories': donation_categories})
+
+    def post(self, request, donation_id):
+        donation = Donation.objects.get(id=donation_id)
+        donation_categories = DonationCategories.objects.all()
+        is_taken = request.POST.get('is_taken')
+        if is_taken == "true":
+            donation.is_taken = True
+            donation.date_taken = date.today()
+            donation.save()
+        else:
+            donation.is_taken = False
+            donation.save()
+        return render(request, 'donation-details.html', {'donation': donation,
+                                                         'donation_categories': donation_categories})
 
 
 class LoginView(View):

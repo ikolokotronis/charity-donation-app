@@ -41,53 +41,36 @@
   </header>
 
     <section id="steps" class="steps">
-      <h2>Profil użytkownika</h2>
 
       <div style="font-size: 20px;" class="steps--container">
         <div class="steps--item">
-            <h2>Dane osobowe</h2>
+            <h2>Szczegóły daru nr {{donation.id}}</h2>
             <ul style="position: relative; right: 22px;">
-                <h4>Imię</h4> {{user.first_name}}
-                <h4>Nazwisko</h4> {{user.last_name}}
-                <h4>E-mail</h4> {{user.email}}
-            </ul>
-            <h2>Dary</h2>
-            {%for donation in donations|dictsort:"is_taken"|dictsort:"date_taken"|dictsort:"date_added"%}
-            <br><b>---</b><br>
-            {%if donation.is_taken == True%}
-            <div style="border: 1px solid #8F8F8D; padding: 10px; color: grey;">
-                {%else%}
-                <div style="border: 1px solid #8F8F8D; padding: 10px;">
-                {%endif%}
-            <h3>Dar nr {{donation.id}} | <a href="/donation/{{donation.id}}/">Szczegóły</a></h3>
-            <ul style="position: relative; right: 22px;">
-                <h4>Data utworzenia wpisu</h4>
-                {{donation.date_added}}
-                <br><br>
-                <h4>Rodzaj</h4>
+                <h4>Wsparta organizacja</h4>
+                {{donation.institution}}
+                <h4>Data wskazana do odebrania rzeczy</h4>
+                {{donation.pick_up_date}}
+                <h4>Przekazane dary</h4>
                 {%for category in donation_categories%}
                 {%if donation.id == category.donation_id%}{{category.category.name}}, {%endif%}
                 {%endfor%}
-                <br><br>
-                <h4>Ilość worków</h4>
-                {{donation.quantity}}
-                <br><br>
-                <h4>Instytucja</h4>
-                {{donation.institution}}
-                <br><br>
-                <h4>Data wskazana do odebrania rzeczy</h4>
-                {{donation.pick_up_date}} o godzinie {{donation.pick_up_time}}
-                <br><br>
                 <h4>Status daru</h4>
+                <form method="post">
+                    {%csrf_token%}
+                    {%if donation.is_taken == True%}
+                    Przekazano<input type="radio" name="is_taken" value="true" checked="checked">
+                    Nie przekazano<input type="radio" name="is_taken" value="false">
+                    {%else%}
+                    Przekazano<input type="radio" name="is_taken" value="true">
+                    Nie przekazano<input type="radio" name="is_taken" value="false" checked="checked">
+                    {%endif%}
+                    <input type="submit" value="Wyślij">
+                </form>
                 {%if donation.is_taken == True%}
-                Odebrano dnia {{donation.date_taken}}
-                {%else%}
-                Nie odebrano
+                <h4>Data odebrania rzeczy</h4>
+                {{donation.date_taken}}
                 {%endif%}
             </ul>
-                </div>
-            {%endfor%}
-
         </div>
       </div>
 
