@@ -174,8 +174,6 @@ class PasswordChangeView(View):
         return render(request, 'change-password.html')
 
     def post(self, request, user_id):
-        user = User.objects.get(id=user_id)
-
         if not request.POST.get('old_password') or not request.POST.get('new_password1') \
                 or not request.POST.get('new_password2'):
             return render(request, 'change-password.html', {'error_text': 'Uzupełnij pola'})
@@ -183,7 +181,6 @@ class PasswordChangeView(View):
         old_password = request.POST.get('old_password')
         user = authenticate(request, username=request.user.email, password=old_password)
         if user is None:
-            login(request, user)
             return render(request, 'change-password.html', {'error_text': 'Stare hasło niepoprawne'})
 
         new_password1 = request.POST.get('new_password1')
