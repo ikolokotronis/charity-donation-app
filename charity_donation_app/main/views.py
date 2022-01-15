@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from django.views import View
 from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories
@@ -82,6 +84,9 @@ class DonationDetailsView(View):
         if is_taken == "true":
             donation.is_taken = True
             donation.date_taken = date.today()
+            now = datetime.datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            donation.time_taken = current_time
             donation.save()
         else:
             donation.is_taken = False
@@ -131,7 +136,8 @@ class LogoutView(View):
 
 class UserPanelView(View):
     def get(self, request, user_id):
-        donations = Donation.objects.filter(user_id=user_id).order_by('date_added').order_by('date_taken').order_by('is_taken')
+        donations = Donation.objects.filter(user_id=user_id).order_by('date_added')\
+            .order_by('date_taken').order_by('time_taken').order_by('is_taken')
         donation_categories = DonationCategories.objects.all()
         return render(request, 'user_panel.html', {'donations': donations,
                                                    'donation_categories': donation_categories})

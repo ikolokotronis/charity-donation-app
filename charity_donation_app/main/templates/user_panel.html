@@ -64,6 +64,9 @@
                 <h4>Data utworzenia wpisu</h4>
                 {{donation.date_added}}
                 <br><br>
+                <h4>Wybrana data odebrania rzeczy</h4>
+                {{donation.pick_up_date}} o godzinie {{donation.pick_up_time}}
+                <br><br>
                 <h4>Rodzaj</h4>
                 {%for category in donation_categories%}
                 {%if donation.id == category.donation_id%}{{category.category.name}}, {%endif%}
@@ -75,12 +78,10 @@
                 <h4>Instytucja</h4>
                 {{donation.institution}}
                 <br><br>
-                <h4>Data wskazana do odebrania rzeczy</h4>
-                {{donation.pick_up_date}} o godzinie {{donation.pick_up_time}}
-                <br><br>
+
                 <h4>Status daru</h4>
                 {%if donation.is_taken == True%}
-                Odebrano dnia {{donation.date_taken}}
+                Odebrano dnia {{donation.date_taken}} o godzinie {{donation.time_taken}}
                 {%else%}
                 Nie odebrano
                 {%endif%}

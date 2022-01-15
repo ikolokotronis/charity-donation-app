@@ -48,8 +48,6 @@
             <ul style="position: relative; right: 22px;">
                 <h4>Wsparta organizacja</h4>
                 {{donation.institution}}
-                <h4>Data wskazana do odebrania rzeczy</h4>
-                {{donation.pick_up_date}}
                 <h4>Przekazane dary</h4>
                 {%for category in donation_categories%}
                 {%if donation.id == category.donation_id%}{{category.category.name}}, {%endif%}
@@ -71,14 +69,18 @@
                     {%endif%}
                     <input style="position: relative; bottom: 42px; left: 10px;" class="btn" type="submit" value="Wyślij">
                 </form>
+                <h4>Wybrana data odebrania rzeczy</h4>
+                {{donation.pick_up_date}}
+                <h4>Status daru</h4>
                 {%if donation.is_taken == True%}
-                <h4>Data odebrania rzeczy</h4>
-                {{donation.date_taken}}
+                Odebrano dnia {{donation.date_taken}} o godzinie {{donation.time_taken}}
+                {%else%}
+                Nie odebrano
                 {%endif%}
-                <h4>Komentarz</h4>
-                {{donation.pick_up_comment}}
                 <h4>Data dodania wpisu</h4>
                 {{donation.date_added}}
+                <h4>Komentarz</h4>
+                {{donation.pick_up_comment}}
             </ul>
         </div>
       </div>
