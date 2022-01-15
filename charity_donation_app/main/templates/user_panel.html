@@ -1,6 +1,6 @@
 {%extends 'base.html'%}
 {%block content%}
-  <header class="header--main-page">
+    <header>
       <nav class="container container--70">
         {%if user.is_authenticated%}
         <ul class="nav--actions">
@@ -9,8 +9,8 @@
             <ul class="dropdown">
               <li><a href="/panel/{{user.id}}/">Profil</a></li>
               {%if not user.is_superuser%}
-              <li><a href="#">Ustawienia</a></li>
-                <li><a href="/logout/">Wyloguj</a></li>
+              <li><a href="/edit/{{user.id}}/">Ustawienia</a></li>
+              <li><a href="/logout/">Wyloguj</a></li>
               {%else%}
               <li><a href="/admin">Panel administracyjny</a></li>
               <li><a href="/logout/">Wyloguj</a></li>
@@ -38,7 +38,7 @@
           <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
         </ul>
       </nav>
-  </header>
+    </header>
 
     <section id="steps" class="steps">
       <h2>Profil użytkownika</h2>
@@ -90,6 +90,7 @@
             {%endfor%}
 
         </div>
+      </div>
       </div>
 
     </section>

@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from datetime import date
 
-
 class LandingPageView(View):
     def get(self, request):
         supported_institutions = len(Institution.objects.all())
@@ -141,3 +140,57 @@ class UserPanelView(View):
         donation_categories = DonationCategories.objects.all()
         return render(request, 'user_panel.html', {'donations': donations,
                                                    'donation_categories': donation_categories})
+
+
+class UserEditView(View):
+    def get(self, request, user_id):
+        if request.user.id != user_id:
+            return redirect(f'/edit/{request.user.id}/')
+        return render(request, 'user-edit.html')
+
+    def post(self, request, user_id):
+        user = User.objects.get(id=user_id)
+
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        if not request.POST.get('password') or not request.POST.get('password2'):
+            return render(request, 'user-edit.html', {'error_text': 'Uzupełnij pola'})
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        if password != password2:
+            return render(request, 'user-edit.html', {'error_text': 'Hasła różnią się od siebie'})
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.save()
+        return render(request, 'user-edit.html', {'success_text': 'Dane zostały zmienione'})
+
+
+class PasswordChangeView(View):
+    def get(self, request, user_id):
+        if request.user.id != user_id:
+            return redirect(f'/edit/{request.user.id}/')
+        return render(request, 'change-password.html')
+
+    def post(self, request, user_id):
+        user = User.objects.get(id=user_id)
+
+        if not request.POST.get('old_password') or not request.POST.get('new_password1') \
+                or not request.POST.get('new_password2'):
+            return render(request, 'change-password.html', {'error_text': 'Uzupełnij pola'})
+
+        old_password = request.POST.get('old_password')
+        user = authenticate(request, username=request.user.email, password=old_password)
+        if user is None:
+            login(request, user)
+            return render(request, 'change-password.html', {'error_text': 'Stare hasło niepoprawne'})
+
+        new_password1 = request.POST.get('new_password1')
+        new_password2 = request.POST.get('new_password2')
+        if new_password1 != new_password2:
+            return render(request, 'change-password.html', {'error_text': 'Hasła różnią się od siebie'})
+
+        user.set_password(new_password1)
+        user.save()
+        return render(request, 'change-password.html', {'success_text': 'Dane zostały zmienione'})

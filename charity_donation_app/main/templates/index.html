@@ -9,7 +9,7 @@
             <ul class="dropdown">
               <li><a href="/panel/{{user.id}}/">Profil</a></li>
               {%if not user.is_superuser%}
-              <li><a href="#">Ustawienia</a></li>
+              <li><a href="/edit/{{user.id}}/">Ustawienia</a></li>
               <li><a href="/logout/">Wyloguj</a></li>
               {%else%}
               <li><a href="/admin">Panel administracyjny</a></li>

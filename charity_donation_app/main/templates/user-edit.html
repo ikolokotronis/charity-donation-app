@@ -40,51 +40,32 @@
       </nav>
     </header>
 
-    <section id="steps" class="steps">
-
-      <div style="font-size: 20px;" class="steps--container">
-        <div class="steps--item">
-            <h2>Szczegóły daru nr {{donation.id}}</h2>
-            <ul style="position: relative; right: 22px;">
-                <h4>Wsparta organizacja</h4>
-                {{donation.institution}}
-                <h4>Przekazane dary</h4>
-                {%for category in donation_categories%}
-                {%if donation.id == category.donation_id%}{{category.category.name}}, {%endif%}
-                {%endfor%}
-                <h4>Adres / dane</h4>
-                Ulica: {{donation.address}}<br>
-                Miasto: {{donation.city}}<br>
-                Kod pocztowy: {{donation.zip_code}}<br>
-                Numer telefonu: {{donation.phone_number}}
-                <h4>Status daru</h4>
-                <form method="post">
-                    {%csrf_token%}
-                    {%if donation.is_taken == True%}
-                    Przekazano<input type="radio" name="is_taken" value="true" checked="checked">
-                    Nie przekazano<input type="radio" name="is_taken" value="false">
-                    {%else%}
-                    Przekazano<input type="radio" name="is_taken" value="true">
-                    Nie przekazano<input type="radio" name="is_taken" value="false" checked="checked">
-                    {%endif%}
-                    <input style="position: relative; bottom: 42px; left: 10px;" class="btn" type="submit" value="Wyślij">
-                </form>
-                <h4>Wybrana data odebrania rzeczy</h4>
-                {{donation.pick_up_date}}
-                <h4>Status daru</h4>
-                {%if donation.is_taken == True%}
-                Odebrano dnia {{donation.date_taken}} o godzinie {{donation.time_taken}}
-                {%else%}
-                Nie odebrano
-                {%endif%}
-                <h4>Data dodania wpisu</h4>
-                {{donation.date_added}}
-                <h4>Komentarz</h4>
-                {{donation.pick_up_comment}}
-            </ul>
+    <section class="login-page">
+      <h2>Edycja danych</h2>
+      <b>{{error_text}}</b>
+      <b>{{success_text}}</b>
+      <form method="post" style="position: relative;left: 170px;">
+        {%csrf_token%}
+        <div class="form-group">
+          <input type="text" name="first_name" value="{{user.first_name}}" />
         </div>
-      </div>
-
+         <div class="form-group">
+          <input type="text" name="last_name" value="{{user.last_name}}" />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" value="{{user.email}}" />
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Hasło" />
+        </div>
+        <div class="form-group">
+          <input type="password" name="password2" placeholder="Powtórz hasło" />
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Zapisz"/>
+        </div>
+      </form><br><br>
+      <a href="/change_password/{{user.id}}/" style="font-size: 17px">Chcesz zmienic hasło?</a>
     </section>
 
     <footer>
