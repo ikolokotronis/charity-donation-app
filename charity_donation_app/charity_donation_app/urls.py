@@ -19,7 +19,7 @@ from main.views import LandingPageView, AddDonationView, LoginView, RegisterView
     LogoutView, UserPanelView, DonationDetailsView, UserEditView, PasswordChangeView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', LandingPageView.as_view()),
+    path('', LandingPageView.as_view(), name='index'),
     path('add_donation/', AddDonationView.as_view(), name='donation-page'),
     path('donation/<int:donation_id>/', DonationDetailsView.as_view()),
     path('login/', LoginView.as_view(), name='login-page'),

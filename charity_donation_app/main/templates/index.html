@@ -138,13 +138,16 @@
           </li>
           {%endfor%}
         </ul>
-        <!-- Pagination
+
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
+          {%if foundations.has_previous%}
+          <li><a href="{% url 'index'%}?page={{foundations.previous_page_number}}" class="btn--small btn--without-border active" data-page="1">Previous page</a></li>
+          {%endif%}
+          {%if foundations.has_next%}
+          <li><a href="{% url 'index'%}?page={{foundations.next_page_number}}" class="btn--small btn--without-border active" data-page="1">Next page</a></li>
+          {%endif%}
         </ul>
-        -->
+
       </div>
 
 
@@ -174,15 +177,14 @@
           {%endfor%}
         </ul>
 
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="4">4</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="5">5</a></li>
+          {%if organizations.has_previous%}
+          <li><a href="{% url 'index'%}?page={{organizations.previous_page_number}}" class="btn--small btn--without-border active" data-page="1">Previous page</a></li>
+          {%endif%}
+          {%if organizations.has_next%}
+          <li><a href="{% url 'index'%}?page={{organizations.next_page_number}}" class="btn--small btn--without-border active" data-page="1">Next page</a></li>
+          {%endif%}
         </ul>
-        -->
       </div>
 
       <!-- SLIDE 3 -->
@@ -210,12 +212,15 @@
          {%endfor%}
         </ul>
 
-        <!-- Pagination
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
+          {%if local_collections.has_previous%}
+          <li><a href="{% url 'index'%}?page={{local_collections.previous_page_number}}" class="btn--small btn--without-border active" data-page="1">Previous page</a></li>
+          {%endif%}
+          {%if local_collections.has_next%}
+          <li><a href="{% url 'index'%}?page={{local_collections.next_page_number}}" class="btn--small btn--without-border active" data-page="1">Next page</a></li>
+          {%endif%}
         </ul>
-        -->
+
       </div>
     </section>
 

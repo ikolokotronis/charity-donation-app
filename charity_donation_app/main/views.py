@@ -1,11 +1,12 @@
 import datetime
-
+from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.views import View
 from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from datetime import date
+
 
 class LandingPageView(View):
     def get(self, request):
@@ -14,9 +15,25 @@ class LandingPageView(View):
         for donation in Donation.objects.all():
             donation_extra_quantity += donation.quantity
         donation_quantity = len(Donation.objects.all()) + donation_extra_quantity
-        foundations = Institution.objects.filter(type=1)
-        organizations = Institution.objects.filter(type=2)
-        local_collections = Institution.objects.filter(type=3)
+        foundation_list = Institution.objects.filter(type=1)
+        organization_list = Institution.objects.filter(type=2)
+        local_collection_list = Institution.objects.filter(type=3)
+        foundation_paginator = Paginator(foundation_list, 5)
+        organization_paginator = Paginator(organization_list, 5)
+        local_collection_paginator = Paginator(local_collection_list, 5)
+        page_num = request.GET.get('page', 1)
+        try:
+            foundations = foundation_paginator.page(page_num)
+        except EmptyPage:
+            foundations = foundation_paginator.page(1)
+        try:
+            organizations = organization_paginator.page(page_num)
+        except EmptyPage:
+            organizations = organization_paginator.page(1)
+        try:
+            local_collections = local_collection_paginator.page(page_num)
+        except EmptyPage:
+            local_collections = local_collection_paginator.page(1)
         institution_categories = InstitutionCategories.objects.all()
         return render(request, 'index.html', {'supported_institutions': supported_institutions,
                                               'donation_quantity': donation_quantity,
