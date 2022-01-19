@@ -2,7 +2,8 @@ import datetime
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.views import View
-from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories, TokenTemporaryStorage
+from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories, \
+    TokenTemporaryStorage
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
@@ -15,6 +16,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from .utils import token_generator
 from django.core.exceptions import ObjectDoesNotExist
+
 
 class LandingPageView(View):
     def get(self, request):
@@ -49,6 +51,28 @@ class LandingPageView(View):
                                               'organizations': organizations,
                                               'local_collections': local_collections,
                                               'institution_categories': institution_categories})
+
+    def post(self, request):
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        message = request.POST.get('message')
+        email_subject = f'Formularz kontaktowy (Wysłano przez użytkownika {name} {surname}'
+        email_body = message
+        administrators = User.objects.filter(is_superuser=True)
+        if not name or not surname or not message:
+            messages.error(request, 'Uzupełnij poprawnie wszystkie pola')
+            return redirect('/')
+        for administrator in administrators:
+            email = administrator.email
+            send_mail(
+                email_subject,
+                email_body,
+                'noreply@noreply.com',
+                [email],
+                fail_silently=False,
+            )
+        messages.success(request, 'Pomyślnie wysłano')
+        return redirect('/')
 
 
 class AddDonationView(View):
@@ -149,7 +173,17 @@ class RegisterView(View):
         email = request.POST.get('email')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
-        if User.objects.filter(username=email):
+        if len(password) < 8 or len(password2) < 8:
+            messages.error(request, 'Hasło jest zbyt krótkie (Min. 8 znaków)')
+            return render(request, 'register.html')
+        elif any(not c.isalnum() for c in password2) is False \
+                or any(c.isupper() for c in password2) is False \
+                or any(c.islower() for c in password2) is False \
+                or any(c.isdigit() for c in password2) is False :
+            messages.error(request, 'Hasło nie posiada wszystkich znaków specjalnych '
+                                    '(Powinny być litery, małe litery, cyfry i znaki specjalne)')
+            return render(request, 'register.html')
+        elif User.objects.filter(username=email):
             messages.add_message(request, messages.INFO, 'Użytkownik o podanym e-mailu już istnieje')
             return render(request, 'register.html')
         elif password != password2:
@@ -169,11 +203,11 @@ class RegisterView(View):
         activation_url = f'http://{domain}{link}'
         email_body = f'Witaj {user}, twój aktywacyjny link:  {activation_url}'
         send_mail(
-                email_subject,
-                email_body,
-                'noreply@noreply.com',
-                [email],
-                fail_silently=False,
+            email_subject,
+            email_body,
+            'noreply@noreply.com',
+            [email],
+            fail_silently=False,
         )
         messages.success(request, 'Sprawdź swoją skrzynkę e-mail aby aktywować konto')
         return render(request, 'register.html')
@@ -214,7 +248,7 @@ class LogoutView(View):
 
 class UserPanelView(View):
     def get(self, request, user_id):
-        donations = Donation.objects.filter(user_id=user_id).order_by('date_added')\
+        donations = Donation.objects.filter(user_id=user_id).order_by('date_added') \
             .order_by('date_taken').order_by('time_taken').order_by('is_taken')
         donation_categories = DonationCategories.objects.all()
         return render(request, 'user_panel.html', {'donations': donations,
@@ -275,7 +309,7 @@ class PasswordChangeView(View):
 class PasswordResetView(View):
     def get(self, request):
         return render(request, 'password-reset.html')
-    
+
     def post(self, request):
         email = request.POST.get('email')
         try:
@@ -294,13 +328,13 @@ class PasswordResetView(View):
                 'noreply@noreply.com',
                 [email],
                 fail_silently=False,
-        )
+            )
             messages.success(request, 'Sprawdź swoją skrzynkę e-mail')
             return render(request, 'password-reset.html')
         except ObjectDoesNotExist:
             messages.error(request, 'Nieprawidłowy e-mail')
             return render(request, 'password-reset.html')
-    
+
 
 class PasswordResetVerificationView(View):
     def get(self, request, uidb64, token):
@@ -325,7 +359,7 @@ class PasswordResetVerificationView(View):
         user = User.objects.get(id=id)
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        
+
         if password1 != password2:
             messages.error(request, 'Hasła nie pasują do siebie')
             return render(request, 'new-password-form.html')
@@ -336,5 +370,3 @@ class PasswordResetVerificationView(View):
 
         messages.success(request, 'Hasło zostało pomyślnie zmienione')
         return redirect('login-page')
-
-

@@ -41,6 +41,13 @@
 
       <div class="slogan container container--90">
         <div class="slogan--item">
+        {% if messages %}
+
+        {% for message in messages %}
+          <h3>{{ message }}</h3>
+        {% endfor %}
+
+        {% endif %}
           <h1>
             Zacznij pomagać!<br />
             Oddaj niechciane rzeczy w zaufane ręce
@@ -228,7 +235,8 @@
         <div id="contact" class="contact">
           <h2>Skontaktuj się z nami</h2>
           <h3>Formularz kontaktowy</h3>
-          <form>
+          <form method="post">
+            {%csrf_token%}
             <div class="form-group form-group--50">
               <input type="text" name="name" placeholder="Imię" />
             </div>
@@ -240,7 +248,7 @@
               <textarea name="message" placeholder="Wiadomość" rows="1"></textarea>
             </div>
 
-            <button class="btn" type="submit">Wyślij</button>
+            <input type="submit" class="btn btn--small" value="Wyślij">
           </form>
         </div>
         <div class="bottom-line">
