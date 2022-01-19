@@ -59,9 +59,11 @@ class LandingPageView(View):
         email_subject = f'Formularz kontaktowy (Wysłano przez użytkownika {name} {surname}'
         email_body = message
         administrators = User.objects.filter(is_superuser=True)
+
         if not name or not surname or not message:
             messages.error(request, 'Uzupełnij poprawnie wszystkie pola')
             return redirect('/')
+
         for administrator in administrators:
             email = administrator.email
             send_mail(
@@ -114,6 +116,17 @@ class AddDonationView(View):
                 donation=donation,
                 category=Category.objects.get(name=category)
             )
+
+        email = request.user.email
+        email_subject = f'Twoje dar nr {donation.id}'
+        email_body = f'Data odbioru: {pick_up_date} o godzinie {pick_up_time}'
+        send_mail(
+            email_subject,
+            email_body,
+            'noreply@noreply.com',
+            [email],
+            fail_silently=False,
+        )
 
         return render(request, 'form-confirmation.html')
 

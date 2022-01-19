@@ -238,17 +238,17 @@
           <form method="post">
             {%csrf_token%}
             <div class="form-group form-group--50">
-              <input type="text" name="name" placeholder="Imię" />
+              <input type="text" required="required" name="name" placeholder="Imię" />
             </div>
             <div class="form-group form-group--50">
-              <input type="text" name="surname" placeholder="Nazwisko" />
+              <input type="text" required="required" name="surname" placeholder="Nazwisko" />
             </div>
 
             <div class="form-group">
-              <textarea name="message" placeholder="Wiadomość" rows="1"></textarea>
+              <textarea name="message" required="required" placeholder="Wiadomość" rows="1"></textarea>
             </div>
 
-            <input type="submit" class="btn btn--small" value="Wyślij">
+            <button class="btn btn--small" type="submit">Wyślij</button>
           </form>
         </div>
         <div class="bottom-line">
