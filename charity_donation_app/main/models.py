@@ -59,3 +59,8 @@ class Donation(models.Model):
 
     def __str__(self):
         return f'{self.user} ({self.institution}, {self.pick_up_time})'
+
+
+class TokenTemporaryStorage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.TextField()

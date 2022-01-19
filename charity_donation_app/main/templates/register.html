@@ -19,7 +19,13 @@
 
     <section class="login-page">
       <h2>Załóż konto</h2>
-      <b>{{error_text}}</b>
+      {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+      {% endif %}
       <form method="post">
         {%csrf_token%}
         <div class="form-group">

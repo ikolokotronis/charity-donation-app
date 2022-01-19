@@ -18,6 +18,13 @@
     </header>
     <section class="login-page">
       <h2>Zaloguj się</h2>
+            {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+      {% endif %}
       <form method="post">
         {%csrf_token%}
         <div class="form-group">

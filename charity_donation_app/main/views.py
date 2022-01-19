@@ -2,11 +2,18 @@ import datetime
 from django.core.paginator import Paginator, EmptyPage
 from django.shortcuts import render, redirect
 from django.views import View
-from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories
+from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories, TokenTemporaryStorage
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from datetime import date
-
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from .utils import token_generator
+from django.core.exceptions import ObjectDoesNotExist
 
 class LandingPageView(View):
     def get(self, request):
@@ -136,12 +143,63 @@ class RegisterView(View):
         email = request.POST.get('email')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
-
-        if password == password2:
-            User.objects.create_user(username=email, first_name=name, last_name=surname, email=email, password=password)
-            return redirect('/login')
+        if User.objects.filter(username=email):
+            messages.add_message(request, messages.INFO, 'Użytkownik o podanym e-mailu już istnieje')
+            return render(request, 'register.html')
         elif password != password2:
-            return render(request, 'register.html', {'error_text': 'Hasła nie pasują do siebie!'})
+            messages.add_message(request, messages.INFO, 'Hasła nie pasują do siebie')
+            return render(request, 'register.html')
+        user = User.objects.create_user(username=email, first_name=name, last_name=surname, email=email)
+        user.set_password(password2)
+        user.is_active = False
+        user.save()
+
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = token_generator.make_token(user)
+        TokenTemporaryStorage.objects.create(user_id=user.id, token=token)
+        domain = get_current_site(request).domain
+        link = reverse('activate-page', kwargs={'uidb64': uidb64, 'token': token})
+        email_subject = 'Activate your account'
+        activate_url = f'http://{domain}{link}'
+        email_body = f'Hello {user} your activation link is {activate_url}'
+        send_mail(
+                email_subject,
+                email_body,
+                'noreply@semycolon.com',
+                [email],
+                fail_silently=False,
+        )
+        messages.success(request, 'Sprawdź swoją skrzynkę e-mail aby aktywować konto')
+        return render(request, 'register.html')
+
+
+class VerificationView(View):
+    def get(self, request, uidb64, token):
+        id = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=id)
+        try:
+            if token == TokenTemporaryStorage.objects.get(user=user).token:
+                TokenTemporaryStorage.objects.get(user=user).delete()
+                if not token_generator.check_token(user, token):
+                    messages.error(request, 'Konto już jest aktywowane')
+                    return redirect('login-page')
+                if user.is_active:
+                    return redirect('login-page')
+
+                user.is_active = True
+                user.save()
+
+                messages.success(request, 'Konto zostało pomyślnie zaktywowane')
+                return redirect('login-page')
+            else:
+                messages.error(request, 'Nie znaleziono aktywującego linku w bazie, '
+                                        'prawdopodobnie konto zostało już aktywowane')
+                return redirect('login-page')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Konto już jest aktywowane')
+            return redirect('login-page')
+
+
 
 
 class LogoutView(View):
