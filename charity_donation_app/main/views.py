@@ -124,15 +124,20 @@ class LoginView(View):
         return render(request, 'login.html')
 
     def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('/')
-        elif User.objects.get(email=email).check_password(password) == False:
-            messages.error(request, 'Niepoprawne hasło')
+        try:
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/')
+            elif not User.objects.get(email=email).check_password(password):
+                messages.error(request, 'Niepoprawne hasło')
+                return render(request, 'login.html')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Podany e-mail nie istnieje w bazie')
             return render(request, 'login.html')
+
 
 class RegisterView(View):
     def get(self, request):
