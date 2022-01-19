@@ -16,7 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from main.views import LandingPageView, AddDonationView, LoginView, RegisterView, \
-    LogoutView, UserPanelView, DonationDetailsView, UserEditView, PasswordChangeView, VerificationView
+    LogoutView, UserPanelView, DonationDetailsView, UserEditView, PasswordChangeView, \
+    VerificationView, PasswordResetView, PasswordResetVerificationView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LandingPageView.as_view(), name='index'),
@@ -28,5 +30,7 @@ urlpatterns = [
     path('panel/<int:user_id>/', UserPanelView.as_view(), name='panel-page'),
     path('edit/<int:user_id>/', UserEditView.as_view(), name='user-edit-page'),
     path('change_password/<int:user_id>/', PasswordChangeView.as_view()),
-    path('activate/<uidb64>/<token>/', VerificationView.as_view(), name='activate-page')
+    path('activate/<uidb64>/<token>/', VerificationView.as_view(), name='activate-page'),
+    path('password-reset-verification/<uidb64>/<token>/', PasswordResetVerificationView.as_view(), name='password-reset-verification'),
+    path('password-reset/', PasswordResetView.as_view())
 ]

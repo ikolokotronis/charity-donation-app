@@ -5,6 +5,7 @@ from django.views import View
 from main.models import Institution, Donation, InstitutionCategories, Category, DonationCategories, TokenTemporaryStorage
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
 from datetime import date
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -129,9 +130,9 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             return redirect('/')
-        else:
-            return redirect('/register')
-
+        elif User.objects.get(email=email).check_password(password) == False:
+            messages.error(request, 'Niepoprawne hasło')
+            return render(request, 'login.html')
 
 class RegisterView(View):
     def get(self, request):
@@ -159,13 +160,13 @@ class RegisterView(View):
         TokenTemporaryStorage.objects.create(user_id=user.id, token=token)
         domain = get_current_site(request).domain
         link = reverse('activate-page', kwargs={'uidb64': uidb64, 'token': token})
-        email_subject = 'Activate your account'
-        activate_url = f'http://{domain}{link}'
-        email_body = f'Hello {user} your activation link is {activate_url}'
+        email_subject = 'Aktywuj swoje konto'
+        activation_url = f'http://{domain}{link}'
+        email_body = f'Witaj {user}, twój aktywacyjny link:  {activation_url}'
         send_mail(
                 email_subject,
                 email_body,
-                'noreply@semycolon.com',
+                'noreply@noreply.com',
                 [email],
                 fail_silently=False,
         )
@@ -175,10 +176,11 @@ class RegisterView(View):
 
 class VerificationView(View):
     def get(self, request, uidb64, token):
-        id = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=id)
         try:
-            if token == TokenTemporaryStorage.objects.get(user=user).token:
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=id)
+            stored_token = TokenTemporaryStorage.objects.get(user=user).token
+            if token == stored_token:
                 TokenTemporaryStorage.objects.get(user=user).delete()
                 if not token_generator.check_token(user, token):
                     messages.error(request, 'Konto już jest aktywowane')
@@ -192,14 +194,11 @@ class VerificationView(View):
                 messages.success(request, 'Konto zostało pomyślnie zaktywowane')
                 return redirect('login-page')
             else:
-                messages.error(request, 'Nie znaleziono aktywującego linku w bazie, '
-                                        'prawdopodobnie konto zostało już aktywowane')
+                messages.error(request, 'Nieprawidłowy link lub konto już zostało aktywowane')
                 return redirect('login-page')
         except ObjectDoesNotExist:
-            messages.error(request, 'Konto już jest aktywowane')
+            messages.error(request, 'Nieprawidłowy link lub konto już zostało aktywowane')
             return redirect('login-page')
-
-
 
 
 class LogoutView(View):
@@ -266,3 +265,71 @@ class PasswordChangeView(View):
         user.set_password(new_password1)
         user.save()
         return render(request, 'change-password.html', {'success_text': 'Dane zostały zmienione'})
+
+
+class PasswordResetView(View):
+    def get(self, request):
+        return render(request, 'password-reset.html')
+    
+    def post(self, request):
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            token = token_generator.make_token(user)
+            TokenTemporaryStorage.objects.create(user_id=user.id, token=token)
+            domain = get_current_site(request).domain
+            link = reverse('password-reset-verification', kwargs={'uidb64': uidb64, 'token': token})
+            email_subject = 'Resetowanie hasła'
+            activation_url = f'http://{domain}{link}'
+            email_body = f'Witaj {user}, twój aktywacyjny link:  {activation_url}'
+            send_mail(
+                email_subject,
+                email_body,
+                'noreply@noreply.com',
+                [email],
+                fail_silently=False,
+        )
+            messages.success(request, 'Sprawdź swoją skrzynkę e-mail')
+            return render(request, 'password-reset.html')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Nieprawidłowy e-mail')
+            return render(request, 'password-reset.html')
+    
+
+class PasswordResetVerificationView(View):
+    def get(self, request, uidb64, token):
+        try:
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(id=id)
+            stored_token = TokenTemporaryStorage.objects.get(user=user).token
+            if token == stored_token:
+                if not token_generator.check_token(user, token):
+                    messages.error(request, 'Hasło już zostało zmienione')
+                    return redirect('login-page')
+                return render(request, 'new-password-form.html')
+            else:
+                messages.error(request, 'Nieprawidłowy link lub hasło już zostało zmienione')
+                return redirect('login-page')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Nieprawidłowy link lub hasło już zostało zmienione')
+            return redirect('login-page')
+
+    def post(self, request, uidb64, token):
+        id = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(id=id)
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        
+        if password1 != password2:
+            messages.error(request, 'Hasła nie pasują do siebie')
+            return render(request, 'new-password-form.html')
+
+        user.set_password(password1)
+        user.save()
+        TokenTemporaryStorage.objects.get(user=user).delete()
+
+        messages.success(request, 'Hasło zostało pomyślnie zmienione')
+        return redirect('login-page')
+
+
