@@ -118,8 +118,8 @@ class AddDonationView(View):
             )
 
         email = request.user.email
-        email_subject = f'Twoje dar nr {donation.id}'
-        email_body = f'Data odbioru: {pick_up_date} o godzinie {pick_up_time}'
+        email_subject = f'Twój dar nr {donation.id}'
+        email_body = f'Dziękujemy za dokonanie daru. Data odbioru: {pick_up_date} o godzinie {pick_up_time}'
         send_mail(
             email_subject,
             email_body,
