@@ -32,6 +32,13 @@
 
       <div class="slogan container container--90">
         <div class="slogan--item">
+          {% if messages %}
+          <ul class="messages">
+          {% for message in messages %}
+              <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+          {% endif %}
           <h1>
             Oddaj rzeczy, których już nie chcesz<br />
             <span class="uppercase">potrzebującym</span>
@@ -57,7 +64,6 @@
         </div>
       </div>
   </header>
-
     <section class="form--steps">
       <div class="form--steps-instructions">
         <div class="form--steps-container">

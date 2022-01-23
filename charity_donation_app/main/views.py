@@ -21,10 +21,9 @@ from django.core.exceptions import ObjectDoesNotExist
 class LandingPageView(View):
     def get(self, request):
         supported_institutions = len(Institution.objects.all())
-        donation_extra_quantity = 0
+        bag_quantity = 0
         for donation in Donation.objects.all():
-            donation_extra_quantity += donation.quantity
-        donation_quantity = len(Donation.objects.all()) + donation_extra_quantity
+            bag_quantity += donation.quantity
         foundation_list = Institution.objects.filter(type=1)
         organization_list = Institution.objects.filter(type=2)
         local_collection_list = Institution.objects.filter(type=3)
@@ -46,7 +45,7 @@ class LandingPageView(View):
             local_collections = local_collection_paginator.page(1)
         institution_categories = InstitutionCategories.objects.all()
         return render(request, 'index.html', {'supported_institutions': supported_institutions,
-                                              'donation_quantity': donation_quantity,
+                                              'bag_quantity': bag_quantity,
                                               'foundations': foundations,
                                               'organizations': organizations,
                                               'local_collections': local_collections,
@@ -97,7 +96,8 @@ class AddDonationView(View):
         pick_up_time = request.POST.get('time')
         pick_up_comment = request.POST.get('more_info')
         user = request.user
-        donation = Donation.objects.create(
+        try:
+            donation = Donation.objects.create(
             quantity=quantity,
             institution=institution,
             address=address,
@@ -110,25 +110,28 @@ class AddDonationView(View):
             user=user
         )
 
-        checked_categories = request.POST.get('checked_categories_backend').split(',')
-        for category in checked_categories:
-            DonationCategories.objects.create(
+            checked_categories = request.POST.get('checked_categories_backend').split(',')
+            for category in checked_categories:
+                DonationCategories.objects.create(
                 donation=donation,
                 category=Category.objects.get(name=category)
-            )
+                )
 
-        email = request.user.email
-        email_subject = f'Twój dar nr {donation.id}'
-        email_body = f'Dziękujemy za dokonanie daru. Data odbioru: {pick_up_date} o godzinie {pick_up_time}'
-        send_mail(
+            email = request.user.email
+            email_subject = f'Twój dar nr {donation.id}'
+            email_body = f'Dziękujemy za dokonanie daru. Data odbioru: {pick_up_date} o godzinie {pick_up_time}'
+            send_mail(
             email_subject,
             email_body,
             'noreply@noreply.com',
             [email],
             fail_silently=False,
-        )
+            )
 
-        return render(request, 'form-confirmation.html')
+            return render(request, 'form-confirmation.html')
+        except Exception:
+            messages.error(request, 'Coś poszło nie tak')
+            return redirect('/add_donation/')
 
 
 class DonationDetailsView(View):
