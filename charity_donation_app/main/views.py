@@ -284,16 +284,23 @@ class UserEditView(View):
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         if not request.POST.get('password') or not request.POST.get('password2'):
-            return render(request, 'user-edit.html', {'error_text': 'Uzupełnij pola'})
+            messages.error(request, 'Uzupełnij pola')
+            return render(request, 'user-edit.html')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         if password != password2:
-            return render(request, 'user-edit.html', {'error_text': 'Hasła różnią się od siebie'})
+            messages.error(request, 'Hasła różnią się od siebie')
+            return render(request, 'user-edit.html')
+        user = authenticate(request, username=request.user.email, password=password2)
+        if user is None:
+            messages.error(request, 'Hasło niepoprawne')
+            return render(request, 'user-edit.html')
         user.first_name = first_name
         user.last_name = last_name
         user.email = email
         user.save()
-        return render(request, 'user-edit.html', {'success_text': 'Dane zostały zmienione'})
+        messages.success(request, 'Dane zostały zmienione')
+        return redirect(f'/edit/{request.user.id}/')
 
 
 class PasswordChangeView(View):
