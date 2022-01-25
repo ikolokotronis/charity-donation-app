@@ -200,10 +200,10 @@ class RegisterView(View):
                                     '(Powinny być litery, małe litery, cyfry i znaki specjalne)')
             return render(request, 'register.html')
         elif User.objects.filter(username=email):
-            messages.add_message(request, messages.INFO, 'Użytkownik o podanym e-mailu już istnieje')
+            messages.error(request, 'Użytkownik o podanym e-mailu już istnieje')
             return render(request, 'register.html')
         elif password != password2:
-            messages.add_message(request, messages.INFO, 'Hasła nie pasują do siebie')
+            messages.error(request, 'Hasła nie pasują do siebie')
             return render(request, 'register.html')
         user = User.objects.create_user(username=email, first_name=name, last_name=surname, email=email)
         user.set_password(password2)
@@ -269,6 +269,31 @@ class UserPanelView(View):
         donation_categories = DonationCategories.objects.all()
         return render(request, 'user_panel.html', {'donations': donations,
                                                    'donation_categories': donation_categories})
+    
+    def post(self, request, user_id):
+        name = request.POST.get('name')
+        surname = request.POST.get('surname')
+        message = request.POST.get('message')
+        email_subject = f'Formularz kontaktowy (Wysłano przez użytkownika {name} {surname}'
+        email_body = message
+        administrators = User.objects.filter(is_superuser=True)
+
+        if not name or not surname or not message:
+            messages.error(request, 'Uzupełnij poprawnie wszystkie pola')
+            return redirect('/')
+
+        for administrator in administrators:
+            email = administrator.email
+            send_mail(
+                email_subject,
+                email_body,
+                'noreply@noreply.com',
+                [email],
+                fail_silently=False,
+            )
+        messages.success(request, 'Pomyślnie wysłano')
+        return redirect(f'/panel/{request.user.id}/')
+
 
 
 class UserEditView(View):
@@ -310,23 +335,31 @@ class PasswordChangeView(View):
         return render(request, 'change-password.html')
 
     def post(self, request, user_id):
-        if not request.POST.get('old_password') or not request.POST.get('new_password1') \
-                or not request.POST.get('new_password2'):
-            return render(request, 'change-password.html', {'error_text': 'Uzupełnij pola'})
+        if not request.POST.get('old_password') or not request.POST.get('new_password1') or not request.POST.get('new_password2'):
+            messages.error(request, 'Uzupełnij pola')
+            return render(request, 'change-password.html')
 
         old_password = request.POST.get('old_password')
         user = authenticate(request, username=request.user.email, password=old_password)
         if user is None:
-            return render(request, 'change-password.html', {'error_text': 'Stare hasło niepoprawne'})
+            messages.error(request, 'Stare hasło niepoprawne')
+            return render(request, 'change-password.html')
 
         new_password1 = request.POST.get('new_password1')
         new_password2 = request.POST.get('new_password2')
         if new_password1 != new_password2:
-            return render(request, 'change-password.html', {'error_text': 'Hasła różnią się od siebie'})
+            messages.error(request, 'Hasła rożnią się od siebie')
+            return render(request, 'change-password.html')
 
         user.set_password(new_password1)
         user.save()
-        return render(request, 'change-password.html', {'success_text': 'Dane zostały zmienione'})
+        new_user = authenticate(request, username=request.user.email, password=new_password1)
+        if user is None:
+            messages.error(request, 'Coś poszło nie tak')
+            return render(request, 'change-password.html')
+        login(request, new_user)
+        messages.success(request, 'Dane zostały zmienione')
+        return redirect(f'/edit/{request.user.id}/')
 
 
 class PasswordResetView(View):
