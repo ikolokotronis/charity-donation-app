@@ -98,7 +98,7 @@
                 <input
                   type="checkbox"
                   name="categories"
-                  value="{{category.name}}"
+                  value="{{category.id}}"
                 />
                 <span class="checkbox"></span>
                 <span class="description">
@@ -109,7 +109,7 @@
             {%endfor%}
 
             <div class="form-group form-group--buttons">
-              <button type="button" class="btn next-step">Dalej</button>
+              <button type="button" id="categoryTrigger" class="btn next-step">Dalej</button>
             </div>
           </div>
 
@@ -136,7 +136,7 @@
           <div data-step="3">
             <h3>Wybierz organizacje, której chcesz pomóc:</h3>
             {%for institution in institutions%}
-            <div class="form-group form-group--checkbox displayNone">
+            <div class="form-group form-group--checkbox d-none">
               <label>
                 <input type="radio" name="organization" value="{{institution.name}}" />
                 <span class="checkbox radio"></span>
@@ -148,7 +148,7 @@
                 </span>
                 {%for institution_category in institution_categories%}
                 {%if institution_category.institution_id == institution.id%}
-                <input type="hidden" name="institutionCategory" value="{{institution_category.category.name}}">
+                <input type="hidden" name="institutionCategory" value="{{institution_category.category_id}}">
                 {%endif%}
                 {%endfor%}
               </label>
