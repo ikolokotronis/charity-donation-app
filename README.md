@@ -89,7 +89,7 @@ This is an example of how to list things you need to use the software and how to
         'NAME': 'db_name_here',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': 'user_name_here',
-        'PASSWORD': 'password_name_here',
+        'PASSWORD': 'password_here',
     }
     }
    ```
