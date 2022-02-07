@@ -62,7 +62,6 @@ This is an example of how to make this project run locally.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * pip
   ```sh
   pip install django
