@@ -23,6 +23,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
+    <li><a href="#demo">Donation demo</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -99,7 +100,8 @@ This is an example of how to list things you need to use the software and how to
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
+## Donation demo
+![](gifs/donation-demo.gif)
 
 <!-- CONTACT -->
 ## Contact
