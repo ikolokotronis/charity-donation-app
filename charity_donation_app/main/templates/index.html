@@ -6,37 +6,37 @@
         {%if user.is_authenticated%}
         <ul class="nav--actions">
           <li class="logged-user">
-            Witaj {{user.first_name}}
+            Hello {{user.first_name}}
             <ul class="dropdown">
-              <li><a href="/panel/{{user.id}}/">Profil</a></li>
+              <li><a href="/panel/{{user.id}}/">Profile</a></li>
               {%if not user.is_superuser%}
-              <li><a href="/edit/{{user.id}}/">Ustawienia</a></li>
-              <li><a href="/logout/">Wyloguj</a></li>
+              <li><a href="/edit/{{user.id}}/">Settings</a></li>
+              <li><a href="/logout/">Log out</a></li>
               {%else%}
-              <li><a href="/admin">Panel administracyjny</a></li>
-              <li><a href="/logout/">Wyloguj</a></li>
+              <li><a href="/admin">Admin panel</a></li>
+              <li><a href="/logout/">Log out</a></li>
               {%endif%}
             </ul>
           </li>
         </ul>
         {%else%}
         <ul class="nav--actions">
-          <li><a href="/login/" class="btn btn--small btn--without-border">Zaloguj</a></li>
-          <li><a href="/register/" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+          <li><a href="/login/" class="btn btn--small btn--without-border">Log in</a></li>
+          <li><a href="/register/" class="btn btn--small btn--highlighted">Register</a></li>
         </ul>
         {%endif%}
 
         <ul>
           <li><a href="/" class="btn btn--without-border active">Start</a></li>
-          <li><a href="#steps" class="btn btn--without-border">O co chodzi?</a></li>
-          <li><a href="#about-us" class="btn btn--without-border">O nas</a></li>
-          <li><a href="#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
+          <li><a href="#steps" class="btn btn--without-border">What is it all about?</a></li>
+          <li><a href="#about-us" class="btn btn--without-border">About us</a></li>
+          <li><a href="#help" class="btn btn--without-border">Foundations and organizations</a></li>
           {%if user.is_authenticated%}
-          <li><a href="/add_donation/" class="btn btn--without-border">Przekaż dary</a></li>
+          <li><a href="/add_donation/" class="btn btn--without-border">Make a donation</a></li>
           {%else%}
-          <li><a href="/login/" class="btn btn--without-border">Przekaż dary</a></li>
+          <li><a href="/login/" class="btn btn--without-border">Make a donation</a></li>
           {%endif%}
-          <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
+          <li><a href="#contact" class="btn btn--without-border">Contact</a></li>
         </ul>
       </nav>
 
@@ -50,8 +50,8 @@
 
         {% endif %}
           <h1>
-            Zacznij pomagać!<br />
-            Oddaj niechciane rzeczy w zaufane ręce
+            Start helping!<br />
+            Give unwanted items to good hands
           </h1>
         </div>
       </div>
@@ -62,13 +62,13 @@
         <div class="stats--item">
           <em>{{bag_quantity}}</em>
           {{test}}
-          <h3>Oddanych worków</h3>
+          <h3>Given bags</h3>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius est beatae, quod accusamus illum tempora!</p>
         </div>
 
         <div class="stats--item">
           <em>{{supported_institutions}}</em>
-          <h3>Wspartych organizacji</h3>
+          <h3>Supported organizations</h3>
           <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam magnam, sint nihil cupiditate quas quam.</p>
         </div>
 
@@ -76,38 +76,38 @@
     </section>
 
     <section id="steps" class="steps">
-      <h2>Wystarczą 4 proste kroki</h2>
+      <h2>Only 4 steps are needed</h2>
 
       <div class="steps--container">
         <div class="steps--item">
           <span class="icon icon--hands"></span>
-          <h3>Wybierz rzeczy</h3>
-          <p>ubrania, zabawki, sprzęt i inne</p>
+          <h3>Choose items</h3>
+          <p>clothes, toys, equipment and others</p>
         </div>
         <div class="steps--item">
           <span class="icon icon--arrow"></span>
-          <h3>Spakuj je</h3>
-          <p>skorzystaj z worków na śmieci</p>
+          <h3>Pack them </h3>
+          <p>Use trash bags</p>
         </div>
         <div class="steps--item">
           <span class="icon icon--glasses"></span>
-          <h3>Zdecyduj komu chcesz pomóc</h3>
-          <p>wybierz zaufane miejsce</p>
+          <h3>Decide who you want to help</h3>
+          <p>Choose a trusted place</p>
         </div>
         <div class="steps--item">
           <span class="icon icon--courier"></span>
-          <h3>Zamów kuriera</h3>
-          <p>kurier przyjedzie w dogodnym terminie</p>
+          <h3>Order a courier</h3>
+          <p>Courier will arrive at a convenient time</p>
         </div>
       </div>
       {%if not user.is_authenticated%}
-      <a href="/register/" class="btn btn--large">Załóż konto</a>
+      <a href="/register/" class="btn btn--large">Register</a>
       {%endif%}
     </section>
 
     <section id="about-us" class="about-us">
       <div class="about-us--text">
-        <h2>O nas</h2>
+        <h2>About us</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas vitae animi rem pariatur incidunt libero optio esse quisquam illo omnis.</p>
         <img src="{%static 'images/signature.svg'%}" class="about-us--text-signature" alt="Signature" />
       </div>
@@ -115,23 +115,23 @@
     </section>
 
      <section id="help" class="help">
-      <h2>Komu pomagamy?</h2>
+      <h2>Who do we help?</h2>
 
       <ul class="help--buttons">
-        <li data-id="1"><a href="#" class="btn btn--without-border active">Fundacjom</a></li>
-        <li data-id="2"><a href="#" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
-        <li data-id="3"><a href="#" class="btn btn--without-border">Lokalnym zbiórkom</a></li>
+        <li data-id="1"><a href="#" class="btn btn--without-border active">Foundations</a></li>
+        <li data-id="2"><a href="#" class="btn btn--without-border">Non-governmental organizations</a></li>
+        <li data-id="3"><a href="#" class="btn btn--without-border">Local collections</a></li>
       </ul>
 
 
       <div class="help--slides active" data-id="1">
-        <p>W naszej bazie znajdziesz listę zweryfikowanych Fundacji, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.</p>
+        <p>In our database you will find a list of verified Foundations with which we cooperate. You can check what they do, who they help and what they need.</p>
 
         <ul class="help--slides-items">
           {%for foundation in foundations%}
           <li>
             <div class="col">
-              <div class="title">Fundacja "{{foundation.name}}"</div>
+              <div class="title">Foundation "{{foundation.name}}"</div>
               <div class="subtitle">{{foundation.description}}</div>
             </div>
             <div class="col">
@@ -161,14 +161,13 @@
 
 
       <div class="help--slides" data-id="2">
-        <p>
-          W naszej bazie znajdziesz listę Organizacji Pozarządowych, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.
+        <p>In our database you will find a list of NGOs we cooperate with. You can check what they do, who they help and what they need.
         </p>
         <ul class="help--slides-items">
           {%for organization in organizations%}
           <li>
             <div class="col">
-              <div class="title">Organizacja "{{organization.name}}"</div>
+              <div class="title">Organization "{{organization.name}}"</div>
               <div class="subtitle">{{organization.description}}</div>
             </div>
 
@@ -197,12 +196,12 @@
 
 
       <div class="help--slides" data-id="3">
-        <p>W naszej bazie znajdziesz listę Lokalnych Zbiórek, z którymi współpracujemy. Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.</p>
+        <p>In our database you will find a list of Local Collections we work with. You can check what they do, who they help and what they need.</p>
         <ul class="help--slides-items">
           {%for local_collection in local_collections%}
           <li>
             <div class="col">
-              <div class="title">Lokalna zbiórka "{{local_collection.name}}"</div>
+              <div class="title">Local collection "{{local_collection.name}}"</div>
               <div class="subtitle">{{local_collection.description}}</div>
             </div>
 
@@ -234,22 +233,22 @@
 
     <footer>
         <div id="contact" class="contact">
-          <h2>Skontaktuj się z nami</h2>
-          <h3>Formularz kontaktowy</h3>
+          <h2>Contact us</h2>
+          <h3>Contact form</h3>
           <form method="post">
             {%csrf_token%}
             <div class="form-group form-group--50">
-              <input type="text" required="required" name="name" placeholder="Imię" />
+              <input type="text" required="required" name="name" placeholder="First name" />
             </div>
             <div class="form-group form-group--50">
-              <input type="text" required="required" name="surname" placeholder="Nazwisko" />
+              <input type="text" required="required" name="surname" placeholder="Last name" />
             </div>
 
             <div class="form-group">
-              <textarea name="message" required="required" placeholder="Wiadomość" rows="1"></textarea>
+              <textarea name="message" required="required" placeholder="Message" rows="1"></textarea>
             </div>
 
-            <button class="btn btn--small" type="submit">Wyślij</button>
+            <button class="btn btn--small" type="submit">Send</button>
           </form>
         </div>
         <div class="bottom-line">

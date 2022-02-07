@@ -55,12 +55,12 @@ class LandingPageView(View):
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         message = request.POST.get('message')
-        email_subject = f'Formularz kontaktowy (Wysłano przez użytkownika {name} {surname}'
+        email_subject = f'Contact form (Sent by user {name} {surname}'
         email_body = message
         administrators = User.objects.filter(is_superuser=True)
 
         if not name or not surname or not message:
-            messages.error(request, 'Uzupełnij poprawnie wszystkie pola')
+            messages.error(request, 'Please fill all fields correctly')
             return redirect('/')
 
         for administrator in administrators:
@@ -72,7 +72,7 @@ class LandingPageView(View):
                 [email],
                 fail_silently=False,
             )
-        messages.success(request, 'Pomyślnie wysłano')
+        messages.success(request, 'Successfully sent')
         return redirect('/')
 
 
@@ -111,15 +111,15 @@ class AddDonationView(View):
         )
 
             checked_categories = request.POST.get('checked_categories_backend').split(',')
-            for category in checked_categories:
+            for category_id in checked_categories:
                 DonationCategories.objects.create(
                 donation=donation,
-                category=Category.objects.get(name=category)
+                category=Category.objects.get(id=category_id)
                 )
 
             email = request.user.email
-            email_subject = f'Twój dar nr {donation.id}'
-            email_body = f'Dziękujemy za dokonanie daru. Data odbioru: {pick_up_date} o godzinie {pick_up_time}'
+            email_subject = f'Donation nr {donation.id}'
+            email_body = f'Thank you for donating. Pick up date: {pick_up_date} at {pick_up_time}'
             send_mail(
             email_subject,
             email_body,
@@ -129,8 +129,8 @@ class AddDonationView(View):
             )
 
             return render(request, 'form-confirmation.html')
-        except Exception:
-            messages.error(request, 'Coś poszło nie tak')
+        except ValueError:
+            messages.error(request, 'Something went wrong')
             return redirect('/add_donation/')
 
 
@@ -172,10 +172,10 @@ class LoginView(View):
                 login(request, user)
                 return redirect('/')
             elif not User.objects.get(email=email).check_password(password):
-                messages.error(request, 'Niepoprawne hasło')
+                messages.error(request, 'Incorrect password')
                 return render(request, 'login.html')
         except ObjectDoesNotExist:
-            messages.error(request, 'Podany e-mail nie istnieje w bazie')
+            messages.error(request, 'Given e-mail does not exist in the database')
             return render(request, 'login.html')
 
 
@@ -190,20 +190,20 @@ class RegisterView(View):
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         if len(password) < 8 or len(password2) < 8:
-            messages.error(request, 'Hasło jest zbyt krótkie (Min. 8 znaków)')
+            messages.error(request, 'Password too short (Min. 8 characters)')
             return render(request, 'register.html')
         elif any(not c.isalnum() for c in password2) is False \
                 or any(c.isupper() for c in password2) is False \
                 or any(c.islower() for c in password2) is False \
                 or any(c.isdigit() for c in password2) is False :
-            messages.error(request, 'Hasło nie posiada wszystkich znaków specjalnych '
-                                    '(Powinny być litery, małe litery, cyfry i znaki specjalne)')
+            messages.error(request, 'The password does not have all special characters'
+                                    '(There should be letters, lowercase letters, numbers and special characters)')
             return render(request, 'register.html')
         elif User.objects.filter(username=email):
-            messages.error(request, 'Użytkownik o podanym e-mailu już istnieje')
+            messages.error(request, 'A user with the given e-mail already exists')
             return render(request, 'register.html')
         elif password != password2:
-            messages.error(request, 'Hasła nie pasują do siebie')
+            messages.error(request, 'Passwords mismatch')
             return render(request, 'register.html')
         user = User.objects.create_user(username=email, first_name=name, last_name=surname, email=email)
         user.set_password(password2)
@@ -215,9 +215,9 @@ class RegisterView(View):
         TokenTemporaryStorage.objects.create(user_id=user.id, token=token)
         domain = get_current_site(request).domain
         link = reverse('activate-page', kwargs={'uidb64': uidb64, 'token': token})
-        email_subject = 'Aktywuj swoje konto'
+        email_subject = 'Activate your account'
         activation_url = f'http://{domain}{link}'
-        email_body = f'Witaj {user}, twój aktywacyjny link:  {activation_url}'
+        email_body = f'Hello {user}, your activation link:  {activation_url}'
         send_mail(
             email_subject,
             email_body,
@@ -225,7 +225,7 @@ class RegisterView(View):
             [email],
             fail_silently=False,
         )
-        messages.success(request, 'Sprawdź swoją skrzynkę e-mail aby aktywować konto')
+        messages.success(request, 'Check your e-mail account for further information')
         return render(request, 'register.html')
 
 
@@ -238,7 +238,7 @@ class VerificationView(View):
             if token == stored_token:
                 TokenTemporaryStorage.objects.get(user=user).delete()
                 if not token_generator.check_token(user, token):
-                    messages.error(request, 'Konto już jest aktywowane')
+                    messages.error(request, 'Account is already activated')
                     return redirect('login-page')
                 if user.is_active:
                     return redirect('login-page')
@@ -246,13 +246,13 @@ class VerificationView(View):
                 user.is_active = True
                 user.save()
 
-                messages.success(request, 'Konto zostało pomyślnie zaktywowane')
+                messages.success(request, 'Account successfully activated')
                 return redirect('login-page')
             else:
-                messages.error(request, 'Nieprawidłowy link lub konto już zostało aktywowane')
+                messages.error(request, 'Incorrect link or account is already activated')
                 return redirect('login-page')
         except ObjectDoesNotExist:
-            messages.error(request, 'Nieprawidłowy link lub konto już zostało aktywowane')
+            messages.error(request, 'Incorrect link or account is already activated')
             return redirect('login-page')
 
 
@@ -274,12 +274,12 @@ class UserPanelView(View):
         name = request.POST.get('name')
         surname = request.POST.get('surname')
         message = request.POST.get('message')
-        email_subject = f'Formularz kontaktowy (Wysłano przez użytkownika {name} {surname}'
+        email_subject = f'Contact form(Sent by user {name} {surname}'
         email_body = message
         administrators = User.objects.filter(is_superuser=True)
 
         if not name or not surname or not message:
-            messages.error(request, 'Uzupełnij poprawnie wszystkie pola')
+            messages.error(request, 'Please fill all fields correctly')
             return redirect('/')
 
         for administrator in administrators:
@@ -291,7 +291,7 @@ class UserPanelView(View):
                 [email],
                 fail_silently=False,
             )
-        messages.success(request, 'Pomyślnie wysłano')
+        messages.success(request, 'Successfully sent')
         return redirect(f'/panel/{request.user.id}/')
 
 
@@ -309,22 +309,22 @@ class UserEditView(View):
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         if not request.POST.get('password') or not request.POST.get('password2'):
-            messages.error(request, 'Uzupełnij pola')
+            messages.error(request, 'Please fill all fields correctly')
             return render(request, 'user-edit.html')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         if password != password2:
-            messages.error(request, 'Hasła różnią się od siebie')
+            messages.error(request, 'Passwords mismatch')
             return render(request, 'user-edit.html')
         user = authenticate(request, username=request.user.email, password=password2)
         if user is None:
-            messages.error(request, 'Hasło niepoprawne')
+            messages.error(request, 'Incorrect password')
             return render(request, 'user-edit.html')
         user.first_name = first_name
         user.last_name = last_name
         user.email = email
         user.save()
-        messages.success(request, 'Dane zostały zmienione')
+        messages.success(request, 'Data has been changed')
         return redirect(f'/edit/{request.user.id}/')
 
 
@@ -336,29 +336,29 @@ class PasswordChangeView(View):
 
     def post(self, request, user_id):
         if not request.POST.get('old_password') or not request.POST.get('new_password1') or not request.POST.get('new_password2'):
-            messages.error(request, 'Uzupełnij pola')
+            messages.error(request, 'Please fill all fields correctly')
             return render(request, 'change-password.html')
 
         old_password = request.POST.get('old_password')
         user = authenticate(request, username=request.user.email, password=old_password)
         if user is None:
-            messages.error(request, 'Stare hasło niepoprawne')
+            messages.error(request, 'Old password incorrect')
             return render(request, 'change-password.html')
 
         new_password1 = request.POST.get('new_password1')
         new_password2 = request.POST.get('new_password2')
         if new_password1 != new_password2:
-            messages.error(request, 'Hasła rożnią się od siebie')
+            messages.error(request, 'Passwords mismatch')
             return render(request, 'change-password.html')
 
         user.set_password(new_password1)
         user.save()
         new_user = authenticate(request, username=request.user.email, password=new_password1)
         if user is None:
-            messages.error(request, 'Coś poszło nie tak')
+            messages.error(request, 'Something went wrong')
             return render(request, 'change-password.html')
         login(request, new_user)
-        messages.success(request, 'Dane zostały zmienione')
+        messages.success(request, 'Data successfully changed')
         return redirect(f'/edit/{request.user.id}/')
 
 
@@ -375,9 +375,9 @@ class PasswordResetView(View):
             TokenTemporaryStorage.objects.create(user_id=user.id, token=token)
             domain = get_current_site(request).domain
             link = reverse('password-reset-verification', kwargs={'uidb64': uidb64, 'token': token})
-            email_subject = 'Resetowanie hasła'
+            email_subject = 'Password reset'
             activation_url = f'http://{domain}{link}'
-            email_body = f'Witaj {user}, twój aktywacyjny link:  {activation_url}'
+            email_body = f'Hello {user}, twój password reset link:  {activation_url}'
             send_mail(
                 email_subject,
                 email_body,
@@ -385,10 +385,10 @@ class PasswordResetView(View):
                 [email],
                 fail_silently=False,
             )
-            messages.success(request, 'Sprawdź swoją skrzynkę e-mail')
+            messages.success(request, 'Check your e-mail inbox')
             return render(request, 'password-reset.html')
         except ObjectDoesNotExist:
-            messages.error(request, 'Nieprawidłowy e-mail')
+            messages.error(request, 'Incorrect e-mail')
             return render(request, 'password-reset.html')
 
 
@@ -400,14 +400,14 @@ class PasswordResetVerificationView(View):
             stored_token = TokenTemporaryStorage.objects.get(user=user).token
             if token == stored_token:
                 if not token_generator.check_token(user, token):
-                    messages.error(request, 'Hasło już zostało zmienione')
+                    messages.error(request, 'Password has already been changed')
                     return redirect('login-page')
                 return render(request, 'new-password-form.html')
             else:
-                messages.error(request, 'Nieprawidłowy link lub hasło już zostało zmienione')
+                messages.error(request, 'Incorrect link or password is already changed')
                 return redirect('login-page')
         except ObjectDoesNotExist:
-            messages.error(request, 'Nieprawidłowy link lub hasło już zostało zmienione')
+            messages.error(request, 'Incorrect link or password is already changed')
             return redirect('login-page')
 
     def post(self, request, uidb64, token):
@@ -417,12 +417,12 @@ class PasswordResetVerificationView(View):
         password2 = request.POST.get('password2')
 
         if password1 != password2:
-            messages.error(request, 'Hasła nie pasują do siebie')
+            messages.error(request, 'Passwords mismatch')
             return render(request, 'new-password-form.html')
 
         user.set_password(password1)
         user.save()
         TokenTemporaryStorage.objects.get(user=user).delete()
 
-        messages.success(request, 'Hasło zostało pomyślnie zmienione')
+        messages.success(request, 'Password changed successfully')
         return redirect('login-page')

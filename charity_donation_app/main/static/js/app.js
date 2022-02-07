@@ -221,7 +221,6 @@ document.addEventListener("DOMContentLoaded", function() {
     updateForm() {
       this.$step.innerText = this.currentStep;
 
-      // TODO: Validation
 
       this.slides.forEach(slide => {
         slide.classList.remove("active");
@@ -234,13 +233,12 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
-      // TODO: get data from inputs and show them in summary
     }
 
     /**
      * Submit form
      *
-     * TODO: validation, send data to server
+     *
      */
     submit(e) {
       e.preventDefault();
@@ -302,11 +300,11 @@ document.addEventListener("DOMContentLoaded", function() {
   const more_info = document.querySelector('textarea[name="more_info"]');
 
   summary_trigger.addEventListener('click', function (){
-    summary_text.innerText = number_of_bags.value+" worki zawierające: "+checked_categories;
+    summary_text.innerText = number_of_bags.value+" bags containing: "+checked_categories;
     document.querySelector('input[name="checked_categories_backend"]').value = checked_categories;
     organizations.forEach(function (organization){
       if(organization.checked){
-        summary_institution.innerText = 'Dla fundacji "'+organization.value+'"';
+        summary_institution.innerText = 'For "'+organization.value+'"';
       }
     });
     document.querySelector('#street').innerText = street.value;

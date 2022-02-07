@@ -1,66 +1,93 @@
 {%extends 'base.html'%}
 {%load static%}
 {%block content%}
-    <header class="header--form-page">
+  <header class="header--form-page">
       <nav class="container container--70">
         {%if user.is_authenticated%}
         <ul class="nav--actions">
           <li class="logged-user">
-            Witaj {{user.first_name}}
+            Hello {{user.first_name}}
             <ul class="dropdown">
-              <li><a href="/panel/{{user.id}}/">Profil</a></li>
-              <li><a href="/edit/{{user.id}}/">Ustawienia</a></li>
-              <li><a href="/logout/">Wyloguj</a></li>
+              <li><a href="/panel/{{user.id}}/">Profile</a></li>
+              <li><a href="/edit/{{user.id}}/">Settings</a></li>
+              <li><a href="/logout/">Log out</a></li>
             </ul>
           </li>
         </ul>
         {%else%}
         <ul class="nav--actions">
-          <li><a href="/login/" class="btn btn--small btn--without-border">Zaloguj</a></li>
-          <li><a href="/register/" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+          <li><a href="/login/" class="btn btn--small btn--without-border">Log in</a></li>
+          <li><a href="/register/" class="btn btn--small btn--highlighted">Register</a></li>
         </ul>
         {%endif%}
 
         <ul>
           <li><a href="/">Start</a></li>
-          <li><a href="/#steps">O co chodzi?</a></li>
-          <li><a href="/#about-us">O nas</a></li>
-          <li><a href="/#help">Fundacje i organizacje</a></li>
-          <li><a href="#contact">Kontakt</a></li>
+          <li><a href="/#steps">What is it all about?</a></li>
+          <li><a href="/#about-us">About us</a></li>
+          <li><a href="/#help">Foundations and organizations</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
 
       <div class="slogan container container--90">
-          <h2>
-            Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
-            informacje o odbiorze.
-          </h2>
+        <div class="slogan--item">
+          {% if messages %}
+          <ul class="messages">
+          {% for message in messages %}
+              <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+          {% endif %}
+          <h1>
+            Give unwanted items<br />
+            <span class="uppercase">to good hands</span>
+          </h1>
+
+          <div class="slogan--steps">
+            <div class="slogan--steps-title">Only 4 steps are needed: </div>
+            <ul class="slogan--steps-boxes">
+              <li>
+                <div><em>1</em><span>Choose items</span></div>
+              </li>
+              <li>
+                <div><em>2</em><span>Pack them in trash bags</span></div>
+              </li>
+              <li>
+                <div><em>3</em><span>Choose a foundation</span></div>
+              </li>
+              <li>
+                <div><em>4</em><span>Order a courier</span></div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </header>
+  </header>
       <div class="slogan container container--90">
           <h2>
-            Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
-            informacje o odbiorze.
+            Thank you for submitting the form. We will e-mail you with information about pickup.
           </h2>
       </div>
 
     <footer>
         <div id="contact" class="contact">
-          <h2>Skontaktuj się z nami</h2>
-          <h3>Formularz kontaktowy</h3>
-          <form>
+          <h2>Contact us</h2>
+          <h3>Contact form</h3>
+          <form method="post">
+            {%csrf_token%}
             <div class="form-group form-group--50">
-              <input type="text" name="name" placeholder="Imię" />
+              <input type="text" required="required" name="name" placeholder="First name" />
             </div>
             <div class="form-group form-group--50">
-              <input type="text" name="surname" placeholder="Nazwisko" />
+              <input type="text" required="required" name="surname" placeholder="Last name" />
             </div>
 
             <div class="form-group">
-              <textarea name="message" placeholder="Wiadomość" rows="1"></textarea>
+              <textarea name="message" required="required" placeholder="Message" rows="1"></textarea>
             </div>
 
-            <button class="btn" type="submit">Wyślij</button>
+            <button class="btn btn--small" type="submit">Send</button>
           </form>
         </div>
         <div class="bottom-line">
