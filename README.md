@@ -23,7 +23,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#demo">Donation demo</a></li>
+    <li><a href="#donation-demo">Donation demo</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
