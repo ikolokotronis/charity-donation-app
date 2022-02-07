@@ -97,7 +97,7 @@
                 <input
                   type="checkbox"
                   name="categories"
-                  value="{{category.id}}"
+                  value="{{category.name}}"
                 />
                 <span class="checkbox"></span>
                 <span class="description">
@@ -147,7 +147,7 @@
                 </span>
                 {%for institution_category in institution_categories%}
                 {%if institution_category.institution_id == institution.id%}
-                <input type="hidden" name="institutionCategory" value="{{institution_category.category_id}}">
+                <input type="hidden" name="institutionCategory" value="{{institution_category.category.name}}">
                 {%endif%}
                 {%endfor%}
               </label>
@@ -215,7 +215,7 @@
           <!-- STEP 5 -->
           <div data-step="5">
             <h3>Summary of your donation</h3>
-            <input type="hidden" name="checked_categories_backend">
+            <input type="hidden" name="checked_categories_for_backend">
 
             <div class="summary">
               <div class="form-section">

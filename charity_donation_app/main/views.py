@@ -110,11 +110,11 @@ class AddDonationView(View):
             user=user
         )
 
-            checked_categories = request.POST.get('checked_categories_backend').split(',')
-            for category_id in checked_categories:
+            checked_categories = request.POST.get('checked_categories_for_backend').split(',')
+            for category_name in checked_categories:
                 DonationCategories.objects.create(
                 donation=donation,
-                category=Category.objects.get(id=category_id)
+                category=Category.objects.get(name=category_name)
                 )
 
             email = request.user.email

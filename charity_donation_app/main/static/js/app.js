@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   summary_trigger.addEventListener('click', function (){
     summary_text.innerText = number_of_bags.value+" bags containing: "+checked_categories;
-    document.querySelector('input[name="checked_categories_backend"]').value = checked_categories;
+    document.querySelector('input[name="checked_categories_for_backend"]').value = checked_categories;
     organizations.forEach(function (organization){
       if(organization.checked){
         summary_institution.innerText = 'For "'+organization.value+'"';
