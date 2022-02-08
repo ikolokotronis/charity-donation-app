@@ -38,7 +38,7 @@ The aim of the project is to create a place where everyone can donate unnecessar
 
 Here's why:
 * People have a lot of unwanted items at their homes.
-* There are many solutions available, but many of them require additional effort or are mistrusted. You have to go to the verified places, and there is no time / there is no way to go there. Containers in neighbourhoods or local collections are unverified and it is not known whether your items will actually go to those in need.  
+* There are many solutions available, but most of them require additional effort or are mistrusted. You have to go to the verified places, and there is no time / there is no way to go there. Containers in neighbourhoods or local collections are unverified and it is not known whether your items will actually go to those in need.  
 A solution is this web application, which will automate and speed up the donation process as well as make sure that all donated items will get to right and trusted hands.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
