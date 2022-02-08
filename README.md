@@ -7,6 +7,7 @@
 <h3 align="center">Charity Donation App</h3>
 
   <p align="center">
+    A web app for donating unnecessary items
     <br />
     <a href="https://github.com/ikolokotronis/Charity-Donation-App"><strong>Explore the docs »</strong></a>
     <br />
