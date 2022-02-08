@@ -124,9 +124,6 @@ This is an example of how to make this project run locally.
 <!-- CONTRIBUTING -->
 ## Contributing
 
-<!-- CONTRIBUTING -->
-## Contributing
-
 Any contributions you make are appreciated.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
