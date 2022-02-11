@@ -61,6 +61,9 @@ A solution is this web application, which will automate and speed up the donatio
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+## Donation demo
+![](gifs/donation-demo.gif)
+
 
 ### Built With
 
@@ -116,9 +119,6 @@ This is an example of how to make this project run locally.
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-## Donation demo
-![](gifs/donation-demo.gif)
 
 
 <!-- CONTRIBUTING -->
