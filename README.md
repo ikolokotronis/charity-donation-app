@@ -1,8 +1,24 @@
 <div id="top"></div>
 
-  <h3 align="center">Charity Donation App</h3>
+
+<br />
+<div align="center">
+
+<h3 align="center">Charity Donation App</h3>
 
   <p align="center">
+    A web app for donating unnecessary items
+    <br />
+    <a href="https://github.com/ikolokotronis/Charity-Donation-App"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="#donation-demo">View Demo</a>
+    ·
+    <a href="https://github.com/ikolokotronis/Charity-Donation-App/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/ikolokotronis/Charity-Donation-App/issues">Request Feature</a>
+  </p>
+</div>
 
 
 
@@ -24,6 +40,7 @@
       </ul>
     </li>
     <li><a href="#donation-demo">Donation demo</a></li>
+    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -38,11 +55,14 @@ The aim of the project is to create a place where everyone can donate unnecessar
 
 Here's why:
 * People have a lot of unwanted items at their homes.
-* There are many solutions available, but many of them require additional effort or are mistrusted. You have to go to the verified places, and there is no time / there is no way to go there. Containers in neighbourhoods or local collections are unverified and it is not known whether your items will actually go to those in need.  
+* There are many solutions available, but most of them require additional effort or are mistrusted. You have to go to the verified places, and there is no time / there is no way to go there. Containers in neighbourhoods or local collections are unverified and it is not known whether your items will actually go to those in need.  
 A solution is this web application, which will automate and speed up the donation process as well as make sure that all donated items will get to right and trusted hands.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+
+## Donation demo
+![](gifs/donation-demo.gif)
 
 
 ### Built With
@@ -62,7 +82,6 @@ This is an example of how to make this project run locally.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * pip
   ```sh
   pip install django
@@ -89,15 +108,18 @@ This is an example of how to list things you need to use the software and how to
         'NAME': 'db_name_here',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'USER': 'user_name_here',
-        'PASSWORD': 'password_name_here',
+        'PASSWORD': 'password_here',
     }
     }
    ```
+4. In your terminal, switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
+5. In settings.py change the email data to yours if you want to work with the django send_email function. *
+
+"*" means optional
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Donation demo
-![](gifs/donation-demo.gif)
 
 <!-- CONTACT -->
 ## Contact
