@@ -51,6 +51,11 @@ Here comes this software with a solution, which will automate and speed up the d
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Key Functionalities
+- Auth system
+- Personal account
+- Donation system
+- Email sending
 
 ## Donation demo
 ![](gifs/donation-demo.gif)
