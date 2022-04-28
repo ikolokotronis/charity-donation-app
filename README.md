@@ -64,11 +64,6 @@ Here comes this software with a solution, which will automate and speed up the d
 ### Built With
 
 * [Django](https://www.djangoproject.com/)
-* [PostgreSQL](https://www.postgresql.org/)
-* [Six](https://six.readthedocs.io/)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
