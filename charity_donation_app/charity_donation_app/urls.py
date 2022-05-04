@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import LandingPageView, AddDonationView, LoginView, RegisterView, \
-    LogoutView, UserPanelView, DonationDetailsView, UserEditView, PasswordChangeView, \
+from main.views import LandingPageView
+
+from donations.views import AddDonationView, DonationDetailsView
+
+from users.views import (
+    LoginView, RegisterView,
+    LogoutView, UserPanelView, UserEditView, PasswordChangeView,
     VerificationView, PasswordResetView, PasswordResetVerificationView
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
