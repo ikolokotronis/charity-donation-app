@@ -72,23 +72,21 @@ This is an example of how to make this project run locally.
 
 ### Prerequisites
 
-* pip
+* Upgrade pip to latest version
   ```sh
-  pip install django
-  ```
-   ```sh
-  pip install six
-  ```
-   ```sh
-  pip install psycopg2-binary
+  python -m pip install --upgrade pip
   ```
 
 ### Installation
 1. Clone the repo
    ```sh
-   git clone https://github.com/ikolokotronis/Charity-Donation-App
+   git clone https://github.com/ikolokotronis/charity-donation-app.git
    ```
-2. Enter your database settings in settings.py. Here is an example if you want to use PostgreSQL:
+2. Install pip packages
+   ```python
+   pip install -r requirements.txt
+   ```
+3. Enter your database settings in settings.py. Here is an example if you want to use PostgreSQL:
    ```python
    DATABASES = {
     'default': {
@@ -100,8 +98,8 @@ This is an example of how to make this project run locally.
     }
     }
    ```
-3. In settings.py change the email data to yours if you want to work with the django send_email function. *
-4.  In your terminal, switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
+4. In settings.py change the email data to yours if you want to work with the django send_email function. *
+5.  In your terminal, switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
 
 "*" means optional
 
