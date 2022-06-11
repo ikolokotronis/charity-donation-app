@@ -105,7 +105,7 @@ This is an example of how to make this project run locally.
 
 Ioannis Kolokotronis - ioanniskolokotronis1@gmail.com
 
-Project Link: [https://github.com/ikolokotronis/Charity-Donation-App]
+Project Link: https://github.com/ikolokotronis/Charity-Donation-App
 
 <!-- LICENSE -->
 ## License
