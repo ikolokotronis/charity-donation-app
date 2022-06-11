@@ -49,8 +49,6 @@ Here's why:
 * There are many solutions available, but most of them require additional effort or are mistrusted. You have to go to the verified places, and there is no time / there is no way to go there. Containers in neighbourhoods or local collections are unverified and it is not known whether your items will actually go to those in need.  
 Here comes this software with a solution, which will automate and speed up the donation process as well as make sure that all donated items will get to right and trusted hands.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ## Key Functionalities
 - Auth system
 - Personal account
@@ -98,13 +96,9 @@ This is an example of how to make this project run locally.
     }
     }
    ```
-4. In settings.py change the email data to yours if you want to work with the django send_email function. *
-5. switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
+4. In order for the email sending functionality to work correctly, in settings.py go to line 137, 138 and fill the blank lines.
+5. Switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
 
-"*" means optional
-
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- CONTACT -->
