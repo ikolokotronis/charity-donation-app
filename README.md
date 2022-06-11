@@ -54,7 +54,7 @@ Here comes this software with a solution, which will automate and speed up the d
 ## Key Functionalities
 - Auth system
 - Personal account
-- Donation system
+- Donation sending/managing system
 - Email sending
 
 ## Donation demo
@@ -99,7 +99,7 @@ This is an example of how to make this project run locally.
     }
    ```
 4. In settings.py change the email data to yours if you want to work with the django send_email function. *
-5.  In your terminal, switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
+5. switch to the main directory (cd charity_donation_app/) and run python manage.py runserver
 
 "*" means optional
 
